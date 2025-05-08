@@ -1,3 +1,4 @@
+console.log("Puppeteer executable path:", require("puppeteer").executablePath());
 const express = require("express");
 const puppeteer = require("puppeteer");
 
