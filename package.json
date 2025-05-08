@@ -1,14 +1,5 @@
-{
-  "name": "khoros-scraper",
-  "version": "1.0.0",
-  "description": "Web scraper using Puppeteer for Render",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "postinstall": "puppeteer install"
-  },
-  "dependencies": {
-    "express": "^5.1.0",
-    "puppeteer": "^24.8.2"
-  }
+"dependencies": {
+  "express": "^5.1.0",
+  "puppeteer-core": "^21.3.8",
+  "chrome-aws-lambda": "^10.1.0"
 }
