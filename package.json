@@ -1,18 +1,14 @@
 {
-  "name": "nodejs",
+  "name": "khoros-scraper",
   "version": "1.0.0",
-  "description": "",
+  "description": "Web scraper using Puppeteer for Render",
   "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@types/node": "^22.13.11",
-    "express": "^5.1.0",
-    "puppeteer": "^24.8.2"
-  },
   "scripts": {
     "start": "node index.js",
     "postinstall": "puppeteer install"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "puppeteer": "^24.8.2"
   }
 }
