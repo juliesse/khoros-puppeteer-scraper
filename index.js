@@ -5,13 +5,11 @@ const cheerio = require('cheerio');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Home route
 app.get('/', (req, res) => {
-  res.send('Welcome to the Web Scraper!');
+  res.send('Web Data Scraper!');
 });
 
-// Scrape route
-app.get('/scrape', async (req, res) => {
+app.get('/products', async (req, res) => {
   const url = "https://www.bell.ca/Mobility/Smartphones_and_mobile_internet_devices";
 
   (async () => {
