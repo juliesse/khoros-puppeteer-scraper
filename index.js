@@ -12,23 +12,34 @@ app.get('/', (req, res) => {
 
 // Scrape route
 app.get('/scrape', async (req, res) => {
-  try {
-    const url = 'https://example.com'; // Replace with the target URL
-    const { data } = await axios.get(url);
-    const $ = cheerio.load(data);
+  const url = "https://www.bell.ca/Mobility/Smartphones_and_mobile_internet_devices";
 
-    // Example: scrape all anchor hrefs
-    const links = [];
-    $('a').each((i, el) => {
-      const href = $(el).attr('href');
-      if (href) links.push(href);
-    });
-
-    res.json({ links });
-  } catch (err) {
-    console.error('Scraping error:', err);
-    res.status(500).json({ error: 'Scraping failed' });
-  }
+  (async () => {
+    try {
+      const { data } = await axios.get(url, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+        },
+      });
+  
+      const $ = cheerio.load(data);
+  
+      const products = [];
+  
+      $(".card-container").each((_, el) => {
+        const name = $(el).find(".small-title").text().trim();
+        const link = $(el).find("a.card-link-js").attr("href");
+        const img = $(el).find("img.img-responsive").attr("data-src");
+  
+        products.push({ name, link, img });
+      });
+  
+      res.json({ products });
+    } catch (error) {
+      console.error("Scraping failed:", error.message);
+    }
+  })();
 });
 
 app.listen(port, () => {
