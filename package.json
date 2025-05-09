@@ -1,14 +1,17 @@
 {
-  "name": "my-scraper-app",
+  "name": "nodejs",
   "version": "1.0.0",
-  "description": "A headless scraper using Puppeteer Core",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0",
-    "puppeteer-core": "^10.1.0",
-    "chrome-aws-lambda": "^10.1.0"
+    "@types/node": "^22.13.11",
+    "axios": "^1.9.0",
+    "cheerio": "^1.0.0"
   }
 }
