@@ -1,31 +1,32 @@
-const express = require("express");
-const chromium = require("chrome-aws-lambda");
-const puppeteer = require("puppeteer-core");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const url =
+  "https://www.bell.ca/Mobility/Smartphones_and_mobile_internet_devices";
 
-app.get("/scrape", async (req, res) => {
+(async () => {
   try {
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
+    const { data } = await axios.get(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+      },
     });
 
-    const page = await browser.newPage();
-    await page.goto("https://www.bell.ca/Mobility/Smartphones_and_mobile_internet_devices", { waitUntil: "domcontentloaded" });
+    const $ = cheerio.load(data);
 
-    const pageTitle = await page.title();
+    const products = [];
 
-    await browser.close();
-    res.send({ title: pageTitle });
+    $(".card-container").each((_, el) => {
+      const name = $(el).find(".small-title").text().trim();
+      const link = $(el).find("a.card-link-js").attr("href");
+      const img = $(el).find("img.img-responsive").attr("data-src");
+
+      products.push({ name, link, img });
+    });
+
+    console.log(products);
   } catch (error) {
-    console.error("Scraping error:", error);
-    res.status(500).send("Scraping failed");
+    console.error("Scraping failed:", error.message);
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
+})();
