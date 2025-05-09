@@ -1,32 +1,36 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
+const express = require('express');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
-const url =
-  "https://www.bell.ca/Mobility/Smartphones_and_mobile_internet_devices";
+const app = express();
+const port = process.env.PORT || 3000;
 
-(async () => {
+// Home route
+app.get('/', (req, res) => {
+  res.send('Welcome to the Web Scraper!');
+});
+
+// Scrape route
+app.get('/scrape', async (req, res) => {
   try {
-    const { data } = await axios.get(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
-      },
-    });
-
+    const url = 'https://example.com'; // Replace with the target URL
+    const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
-    const products = [];
-
-    $(".card-container").each((_, el) => {
-      const name = $(el).find(".small-title").text().trim();
-      const link = $(el).find("a.card-link-js").attr("href");
-      const img = $(el).find("img.img-responsive").attr("data-src");
-
-      products.push({ name, link, img });
+    // Example: scrape all anchor hrefs
+    const links = [];
+    $('a').each((i, el) => {
+      const href = $(el).attr('href');
+      if (href) links.push(href);
     });
 
-    console.log(products);
-  } catch (error) {
-    console.error("Scraping failed:", error.message);
+    res.json({ links });
+  } catch (err) {
+    console.error('Scraping error:', err);
+    res.status(500).json({ error: 'Scraping failed' });
   }
-})();
+});
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
